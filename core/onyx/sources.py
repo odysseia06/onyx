@@ -30,13 +30,14 @@ from .paths import split_portable, to_native
 OBSIDIAN_SKILLS = "obsidian-skills"
 DEFAULT_REPOS = {OBSIDIAN_SKILLS: "https://github.com/kepano/obsidian-skills"}
 
-# The kepano/obsidian-skills packages Onyx agents may name in their `skills:`
-# lists. sources.py installs whatever the pinned upstream ships, so this is the
-# curated subset Onyx depends on — the allow-list skillcheck.py validates
-# external references against. `obsidian-cli` is intentionally absent: it is not
-# a real upstream skill; its command vocabulary lives in the vault-operations
-# skill, and agent references to it are dropped, not allowed.
-EXTERNAL_SKILL_IDS = frozenset({"obsidian-markdown", "obsidian-bases", "obsidian-tasks"})
+# The kepano/obsidian-skills packages Onyx agents reference but that no module
+# provides. sources.py installs whatever the pinned upstream ships, so this is
+# the curated subset the validator (skillcheck.py) treats as known-external.
+# Note `obsidian-tasks`/`obsidian-templater` are NOT here — those are core's own
+# module skills. `obsidian-cli` is intentionally absent: it is not a real
+# upstream skill; its command vocabulary lives in the vault-operations skill,
+# and agent references to it are dropped, not allowed.
+EXTERNAL_SKILL_IDS = frozenset({"obsidian-markdown", "obsidian-bases", "defuddle"})
 
 SOURCE_MODULE_PREFIX = "source:"
 _SHA_RE = re.compile(r"^[0-9a-f]{40}$")

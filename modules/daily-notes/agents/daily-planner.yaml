@@ -26,7 +26,7 @@ scope:
     - "{{onyx.templates_root}}/**"
   write:
     - "{{root}}/**"
-skills: [daily-notes, task-capture, vault-operations, obsidian-cli, obsidian-markdown, obsidian-tasks]
+skills: [daily-notes, task-capture, vault-operations, obsidian-markdown, obsidian-tasks]
 escalate_when:
   - asked to delete or rewrite a past day's note
   - a captured task clearly belongs to another life domain and its destination is ambiguous

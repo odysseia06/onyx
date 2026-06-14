@@ -58,7 +58,15 @@ def resolve_modules(config: Config, library: dict[str, Manifest]) -> list[Manife
 
     for mod_id in sorted(enabled):
         visit(mod_id, ())
-    return [library[mod_id] for mod_id in ordered]
+    result = [library[mod_id] for mod_id in ordered]
+
+    # Every agent's declared skills must resolve to an installed skill — one
+    # provided by a module in the agent's dependency closure, or a known external
+    # (kepano) skill. Catches cross-module references a vault would not satisfy.
+    from .skillcheck import check_agent_skills
+
+    check_agent_skills({m.name: m for m in result})
+    return result
 
 
 def _check_type(var: Variable, value: object, *, where: str) -> object:
