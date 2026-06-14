@@ -23,6 +23,8 @@ provides:
     - daily-notes
   agents:
     - daily-planner
+seeds:
+  - ".obsidian/daily-notes.json"
 post_install: |
   Create today's note from Templates/Daily/Daily Note.md; the daily-notes skill
   documents the folder layout. The task-query blocks need the community Tasks

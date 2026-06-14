@@ -51,7 +51,7 @@
     },
     {
       "path": ".claude/skills/vault-operations/SKILL.md",
-      "sha256": "a23e089b754fe935580b1770723a30b8286173a40193ad903b8ad6e01e775057",
+      "sha256": "7f6a9b3324aa8c789ced533f800fbe9244452b12ba2c0d1ce1f0872723c0a3f8",
       "module": "core",
       "module_version": "0.1.0",
       "kind": "managed",

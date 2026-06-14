@@ -7,6 +7,10 @@ description: How an agent safely operates a live Obsidian vault through the obsi
 
 `vault-conventions` governs what a note looks like; this skill governs how you change a *live* vault. When Obsidian is running with its command-line interface enabled, the `obsidian` CLI drives the open vault directly — create notes, append to the daily note, set frontmatter, query tasks and Bases. That is real power over the user's data, so it comes with a contract. This skill is that contract; the `obsidian-cli` skill documents the command syntax.
 
+## Finding the CLI
+
+If `obsidian` is not on PATH, it may still be installed — a terminal opened before the CLI was enabled won't have it yet. Before concluding the CLI is unavailable, look for the binary at the platform's standard location and call it by full path: Windows `%LOCALAPPDATA%\Programs\Obsidian\Obsidian.com`, macOS `/usr/local/bin/obsidian`, Linux `~/.local/bin/obsidian`. Only treat the CLI as genuinely unavailable if it is not there either.
+
 ## The CLI in brief
 
 - It drives a **running** Obsidian instance over its open vault. If `obsidian vault info=name` returns nothing, the app is not running or the CLI is not enabled — say so and stop. Do not silently fall back to editing files on disk; that bypasses Obsidian's own indexing and file history.

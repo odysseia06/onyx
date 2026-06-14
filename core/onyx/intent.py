@@ -108,6 +108,13 @@ def _start_here_intent(manifests: list[Manifest], core_version: str) -> FileInte
     )
 
 
+_DAILY_NOTE_FORMATS = {
+    "YYYY/MM": "YYYY/MM/YYYY-MM-DD",
+    "YYYY": "YYYY/YYYY-MM-DD",
+    "flat": "YYYY-MM-DD",
+}
+
+
 def build_desired_state(config: Config, manifests: list[Manifest]) -> DesiredState:
     resolved_vars = {
         m.name: resolve_variables(
@@ -116,6 +123,21 @@ def build_desired_state(config: Config, manifests: list[Manifest]) -> DesiredSta
         for m in manifests
     }
     from .render import _style_segment
+
+    # First-party derived values for the daily-notes module: Obsidian's Daily
+    # Notes plugin stores a date format (which also encodes the sub-folder
+    # layout) and a template path, so that module's .obsidian/daily-notes.json
+    # seed can follow the granularity choice and the vault's folder style.
+    if "daily-notes" in resolved_vars:
+        dn = resolved_vars["daily-notes"]
+        dn["daily_format"] = _DAILY_NOTE_FORMATS.get(dn.get("granularity"), "YYYY-MM-DD")
+        dn["daily_template"] = "/".join(
+            (
+                _style_segment("Templates", config.folder_style),
+                _style_segment("Daily", config.folder_style),
+                "Daily Note",
+            )
+        )
 
     globals_ = {
         "today": resolve_today(),

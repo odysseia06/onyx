@@ -1,9 +1,14 @@
 """The real M2 modules, end to end: install, render, style, idempotence (KICKSTART.md §14 M2)."""
 
+import json
+
 import pytest
 
-from conftest import REAL_MODULES, run_cli, tree_hashes
+from conftest import REAL_MODULES, make_config, run_cli, tree_hashes
+from onyx.intent import build_desired_state
 from onyx.manifests import load_manifest
+from onyx.repo import discover_modules
+from onyx.resolve import resolve_modules
 
 
 @pytest.fixture
@@ -37,6 +42,32 @@ def test_full_vault_is_healthy_and_converged(full_vault, capsys):
     before = tree_hashes(full_vault)
     assert run_cli("apply", "--vault", str(full_vault), "--yes") == 0
     assert tree_hashes(full_vault) == before  # P3 holds across the whole M2 surface
+
+
+def _daily_notes_seed(granularity: str, folder_style: str) -> dict:
+    config = make_config(
+        {"daily-notes": {"version": "0.1.0", "vars": {"granularity": granularity}}},
+        folder_style=folder_style,
+    )
+    manifests = resolve_modules(config, discover_modules(REAL_MODULES))
+    files = build_desired_state(config, manifests).file_by_path()
+    return json.loads(files[".obsidian/daily-notes.json"].content.decode("utf-8"))
+
+
+@pytest.mark.parametrize(
+    "granularity,fmt",
+    [("YYYY/MM", "YYYY/MM/YYYY-MM-DD"), ("YYYY", "YYYY/YYYY-MM-DD"), ("flat", "YYYY-MM-DD")],
+)
+def test_daily_notes_seed_format_follows_granularity(granularity, fmt):
+    """The seeded Daily Notes config encodes the granularity so daily:* aligns with Onyx's layout."""
+    cfg = _daily_notes_seed(granularity, "Title-Case-Hyphen")
+    assert cfg == {"folder": "Daily-Notes", "format": fmt, "template": "Templates/Daily/Daily Note"}
+
+
+def test_daily_notes_seed_template_and_folder_follow_style():
+    cfg = _daily_notes_seed("flat", "kebab-case")
+    assert cfg["folder"] == "daily-notes"
+    assert cfg["template"] == "templates/daily/Daily Note"
 
 
 def test_no_unrendered_placeholders_outside_static_skills(full_vault):

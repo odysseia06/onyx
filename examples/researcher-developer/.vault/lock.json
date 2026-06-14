@@ -3,7 +3,7 @@
   "entries": [
     {
       "path": ".claude/agents/daily-planner.md",
-      "sha256": "6ebb1c66288ada8e43742e7bd54b4cd0447b4baa99f026dfc60c3a7cbf5aafec",
+      "sha256": "7ff0af76b172ee0ef0b8c438f03d91fd2c55040a0b369a51abab9907177a5bf8",
       "module": "daily-notes",
       "module_version": "0.1.0",
       "kind": "managed",
@@ -163,7 +163,7 @@
     },
     {
       "path": ".claude/skills/vault-operations/SKILL.md",
-      "sha256": "a23e089b754fe935580b1770723a30b8286173a40193ad903b8ad6e01e775057",
+      "sha256": "7f6a9b3324aa8c789ced533f800fbe9244452b12ba2c0d1ce1f0872723c0a3f8",
       "module": "core",
       "module_version": "0.1.0",
       "kind": "managed",
@@ -173,6 +173,14 @@
       "path": ".obsidian/community-plugins.json",
       "sha256": "45fcb9f28510a586ed7454e02af4f79a865da6b84edb466c5d4e0208b8ae4608",
       "module": "core",
+      "module_version": "0.1.0",
+      "kind": "seeded",
+      "location": "vault"
+    },
+    {
+      "path": ".obsidian/daily-notes.json",
+      "sha256": "feca798a1d1bd5be172165ca3ff43726f28270293b8bf1805869bb2487ee8e48",
+      "module": "daily-notes",
       "module_version": "0.1.0",
       "kind": "seeded",
       "location": "vault"

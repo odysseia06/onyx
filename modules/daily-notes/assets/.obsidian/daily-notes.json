@@ -1,0 +1,5 @@
+{
+  "folder": "{{root}}",
+  "format": "{{daily_format}}",
+  "template": "{{daily_template}}"
+}
