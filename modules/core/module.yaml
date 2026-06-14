@@ -13,6 +13,7 @@ provides:
     - vault-conventions
     - obsidian-tasks
     - obsidian-templater
+    - vault-operations
 seeds:
   - "Home.md"
   - ".obsidian/community-plugins.json"

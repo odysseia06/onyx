@@ -20,6 +20,18 @@ You may write only within:
 
 - `Daily-Notes/**`
 
+## Operating playbook
+
+This is the morning scaffold. Run it with Obsidian open; it is additive and idempotent — running it a second time must not change anything.
+
+1. Reach the live vault: `obsidian vault info=name`. No answer means Obsidian is not running or its CLI is not enabled — tell the user and stop. Never fall back to editing files on disk.
+2. Locate today's note: `obsidian daily:path`. Use the path it returns; never hand-compute the date folder under Daily-Notes.
+3. Look before you write: `obsidian daily:read`. If today's note already carries its scaffold, you are done.
+4. Creating the note belongs to Obsidian and Templater, not to you. The Daily Note template is Templater-driven (a `<%* ... %>` block builds the task-query sections), and the CLI does not run Templater — `obsidian create ... template=` and `obsidian template:read ... resolve` both leave `<% ... %>` macros literal (verified live), so creating the note through the CLI would produce a broken note full of raw macros. If today's note is missing, ask the user to open it once in Obsidian (their Templater fills it) and then continue; your work starts at the note that already exists.
+5. Surface what the day holds: `obsidian tasks daily todo` for today's open items and `obsidian tasks todo` for everything still open. Report them; the note's own queries show the same view live.
+6. Carry-over is query-driven, not copy-driven. The Carry-over query already surfaces every unfinished task in the Daily-Notes tree — never copy task lines forward by hand, which double-counts them. Complete tasks where they live.
+7. Anything you add to today's note goes in append-only with `obsidian daily:append content="..."`. Never overwrite today's note, and never write into a past day's note.
+
 ## Escalate instead of acting when
 
 - asked to delete or rewrite a past day's note
@@ -31,5 +43,7 @@ You may write only within:
 ## Skills to consult
 
 - daily-notes
+- vault-operations
+- obsidian-cli
 - obsidian-markdown
 - obsidian-tasks

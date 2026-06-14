@@ -3,7 +3,7 @@
   "entries": [
     {
       "path": ".claude/agents/daily-planner.md",
-      "sha256": "0bade52098ac234fbe76d0b9b7b88ff3766a1c0c6133cee3d72ef63bae17502b",
+      "sha256": "6ebb1c66288ada8e43742e7bd54b4cd0447b4baa99f026dfc60c3a7cbf5aafec",
       "module": "daily-notes",
       "module_version": "0.1.0",
       "kind": "managed",
@@ -108,6 +108,14 @@
     {
       "path": ".claude/skills/vault-conventions/naming.md",
       "sha256": "f74fea87636bfc0929130beff625372db91f1e316ec095c0bff626394f3bfc5b",
+      "module": "core",
+      "module_version": "0.1.0",
+      "kind": "managed",
+      "location": "vault"
+    },
+    {
+      "path": ".claude/skills/vault-operations/SKILL.md",
+      "sha256": "65e03c153f0ac26fb67b40a82d1357d9b4060b8dade187c4f1eda12cb112161c",
       "module": "core",
       "module_version": "0.1.0",
       "kind": "managed",

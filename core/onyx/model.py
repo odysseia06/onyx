@@ -120,6 +120,7 @@ class AgentDef:
     skills: tuple[str, ...] = ()
     escalate_when: tuple[str, ...] = ()
     disclaimer: str = ""
+    playbook: str = ""
 
 
 @dataclass(frozen=True)

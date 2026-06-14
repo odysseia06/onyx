@@ -18,7 +18,7 @@ def skill_frontmatter(skill_dir):
 
 
 @pytest.mark.parametrize(
-    "skill_id", ["vault-bootstrap", "vault-conventions", "obsidian-tasks", "obsidian-templater"]
+    "skill_id", ["vault-bootstrap", "vault-conventions", "obsidian-tasks", "obsidian-templater", "vault-operations"]
 )
 def test_core_skill_frontmatter_is_spec_shaped(skill_id):
     meta = skill_frontmatter(CORE_SKILLS / skill_id)
@@ -33,6 +33,7 @@ def test_core_manifest_binds_both_skills():
         "obsidian-templater",
         "vault-bootstrap",
         "vault-conventions",
+        "vault-operations",
     ]
     assert all((s.directory / "SKILL.md").is_file() for s in manifest.skills)
 
@@ -81,4 +82,4 @@ def test_modules_command_lists_the_library(capsys):
     assert run_cli("modules") == 0
     out = capsys.readouterr().out
     assert "core 0.1.0" in out
-    assert "skills: vault-bootstrap, vault-conventions, obsidian-tasks, obsidian-templater" in out
+    assert "skills: vault-bootstrap, vault-conventions, obsidian-tasks, obsidian-templater, vault-operations" in out

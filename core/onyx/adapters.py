@@ -63,6 +63,7 @@ class ResolvedAgent:
         self.skills = list(agent.skills)
         self.escalations = [rt(item) for item in (*agent.escalate_when, *_STANDING_ESCALATIONS)]
         self.disclaimer = rt(agent.disclaimer) if agent.disclaimer else ""
+        self.playbook = rt(agent.playbook) if agent.playbook else ""
 
     def body_lines(self) -> list[str]:
         lines = [
@@ -78,6 +79,8 @@ class ResolvedAgent:
         lines += [f"- `{p}`" for p in self.read]
         lines += ["", "You may write only within:", ""]
         lines += [f"- `{p}`" for p in self.write] if self.write else ["- (nowhere — this agent is read-only)"]
+        if self.playbook:
+            lines += ["", "## Operating playbook", "", self.playbook]
         lines += ["", "## Escalate instead of acting when", ""]
         lines += [f"- {item}" for item in self.escalations]
         if self.skills:

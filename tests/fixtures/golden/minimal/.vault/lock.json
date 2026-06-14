@@ -50,6 +50,14 @@
       "location": "vault"
     },
     {
+      "path": ".claude/skills/vault-operations/SKILL.md",
+      "sha256": "65e03c153f0ac26fb67b40a82d1357d9b4060b8dade187c4f1eda12cb112161c",
+      "module": "core",
+      "module_version": "0.1.0",
+      "kind": "managed",
+      "location": "vault"
+    },
+    {
       "path": ".obsidian/community-plugins.json",
       "sha256": "45fcb9f28510a586ed7454e02af4f79a865da6b84edb466c5d4e0208b8ae4608",
       "module": "core",

@@ -18,6 +18,7 @@ def test_real_core_module_loads():
         "vault-conventions",
         "obsidian-tasks",
         "obsidian-templater",
+        "vault-operations",
     ]
     assert all(f.source.is_file() for f in (*manifest.templates, *manifest.seeds))
 
