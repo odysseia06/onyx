@@ -3,6 +3,7 @@
 import json
 
 import pytest
+import yaml
 
 from conftest import REAL_MODULES, make_config, run_cli, tree_hashes
 from onyx.intent import build_desired_state
@@ -23,18 +24,30 @@ def full_vault(tmp_path):
 
 
 def test_all_three_modules_load_with_their_surface():
-    for name, skill, agent in (
-        ("daily-notes", "daily-notes", "daily-planner"),
-        ("academic", "exam-prep", "study-coach"),
-        ("fitness", "fitness-review", "fitness-coach"),
+    for name, skills, agent in (
+        ("daily-notes", ["daily-notes", "task-capture"], "daily-planner"),
+        ("academic", ["exam-prep"], "study-coach"),
+        ("fitness", ["fitness-review"], "fitness-coach"),
     ):
         manifest = load_manifest(REAL_MODULES / name)
-        assert [s.id for s in manifest.skills] == [skill]
+        assert [s.id for s in manifest.skills] == skills
         assert [a.name for a in manifest.agents] == [agent]
     fitness = load_manifest(REAL_MODULES / "fitness")
     assert len(fitness.templates) == 14
     assert len(fitness.seeds) == 4
     assert fitness.agents[0].disclaimer  # §17.4: the disclaimer is baked into the definition
+
+
+def test_task_capture_skill_is_provided_and_spec_shaped():
+    manifest = load_manifest(REAL_MODULES / "daily-notes")
+    assert "task-capture" in [s.id for s in manifest.skills]
+    skill_md = (REAL_MODULES / "daily-notes" / "skills" / "task-capture" / "SKILL.md").read_text(
+        encoding="utf-8"
+    )
+    assert skill_md.startswith("---\n")
+    meta = yaml.safe_load(skill_md.split("---\n", 2)[1])
+    assert meta["name"] == "task-capture"
+    assert isinstance(meta["description"], str) and len(meta["description"]) > 40
 
 
 def test_full_vault_is_healthy_and_converged(full_vault, capsys):

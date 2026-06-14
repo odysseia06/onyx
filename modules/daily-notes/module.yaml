@@ -21,6 +21,7 @@ provides:
     - "Templates/Daily/Daily Note.md"
   skills:
     - daily-notes
+    - task-capture
   agents:
     - daily-planner
 seeds:
