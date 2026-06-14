@@ -81,7 +81,7 @@ Every file Onyx writes is one of two kinds. **Managed** files (templates, views,
 | Module | What it gives you |
 |---|---|
 | `core` | The shared conventions, the `Templates/` root, and the home note every module builds on. |
-| `daily-notes` | One note per day with task-rollover queries: due, scheduled, overdue, carry-over. |
+| `daily-notes` | One note per day with task-rollover queries (due, scheduled, overdue, carry-over, captured) and natural-language task capture. |
 | `academic` | Courses from a copy-per-course template; exam prep tracked through a Base. |
 | `fitness` | Training, nutrition, and body tracking, driven by a Strategy note you own. |
 | `research` | A typed paper pipeline: PDF to summary to topic links, over a multi-view Paper Library Base. |
@@ -97,7 +97,9 @@ Enable any combination with `onyx add`, or start from a **profile** (a named mod
 
 ## The agent layer (optional)
 
-When you use Claude Code, each enabled module installs scoped skills and a per-domain agent into `.claude/` — a `research-librarian`, a `study-coach`, a `fitness-coach`, and so on, each with explicit read/write boundaries. Other runtimes get a generated `AGENTS.md`. Delete `.claude/` entirely and the vault still works as plain files; the agents only ever amplify.
+When you use Claude Code, each enabled module installs scoped skills and a per-domain agent into `.claude/` — `daily-planner`, `research-librarian`, `study-coach`, `fitness-coach`, and so on, each with explicit read/write boundaries. A generated `CLAUDE.md` orients Claude the moment you open the vault, pointing at the agents and the operating rules so a plain request reaches the right one; other runtimes get a generated `AGENTS.md`.
+
+These agents don't only suggest — they **operate the live vault** through Obsidian's official command-line interface: scaffold and triage the day, capture a task from a sentence (*"add a task to fix this by Friday"*) into the right note, file a typed paper summary, and so on. Every write follows one contract (the `vault-operations` skill): additive by default, inside the agent's scope, escalating rather than guessing — so the never-clobber guarantee holds for agents too. Delete `.claude/` entirely and the vault still works as plain files; the agent layer is power, never a dependency.
 
 ## Documentation
 
