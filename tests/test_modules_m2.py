@@ -83,6 +83,15 @@ def test_daily_notes_seed_template_and_folder_follow_style():
     assert cfg["template"] == "templates/daily/Daily Note"
 
 
+def test_daily_template_has_captured_query():
+    config = make_config({"daily-notes": {"version": "0.1.0", "vars": {}}})
+    manifests = resolve_modules(config, discover_modules(REAL_MODULES))
+    files = build_desired_state(config, manifests).file_by_path()
+    template = files["Templates/Daily/Daily Note.md"].content.decode("utf-8")
+    assert "### Captured" in template
+    assert "tags include #captured" in template
+
+
 def test_no_unrendered_placeholders_outside_static_skills(full_vault):
     offenders = []
     for path in full_vault.rglob("*"):
