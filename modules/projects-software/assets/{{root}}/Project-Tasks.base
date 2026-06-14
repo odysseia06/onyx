@@ -2,6 +2,7 @@ filters:
   and:
     - 'file.hasTag("task")'
     - 'file.hasTag("project")'
+    - 'file.inFolder("{{root}}")'
 
 properties:
   file.name:

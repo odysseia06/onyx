@@ -159,3 +159,11 @@ def test_exam_base_lands_inside_the_course_template(full_vault):
     ).read_text(encoding="utf-8")
     assert 'file.inFolder("Academic/Courses/_Course-Template/Exam-Prep")' in base
     assert "point this filter at the new" in base  # the copy-per-course instruction survives
+
+
+def test_project_tasks_base_excludes_the_template():
+    config = make_config({"projects-software": {"version": "0.1.0"}})
+    manifests = resolve_modules(config, discover_modules(REAL_MODULES))
+    files = build_desired_state(config, manifests).file_by_path()
+    base = files["Projects/Software/Project-Tasks.base"].content.decode("utf-8")
+    assert 'file.inFolder("Projects/Software")' in base
