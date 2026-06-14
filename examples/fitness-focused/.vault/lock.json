@@ -91,7 +91,7 @@
     },
     {
       "path": ".vault/config.yaml",
-      "sha256": "4ea5ae7e16ada9039345071749fee57d473f1e772256728f0cc2c1288b650391",
+      "sha256": "a2c10841d0c0c1811191ec382c42fddf549bea6c0cdab924259a24d5ec81e553",
       "module": "core",
       "module_version": "0.1.0",
       "kind": "seeded",
