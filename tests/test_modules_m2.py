@@ -92,6 +92,14 @@ def test_daily_template_has_captured_query():
     assert "tags include #captured" in template
 
 
+def test_daily_planner_agent_lists_task_capture():
+    config = make_config({"daily-notes": {"version": "0.1.0", "vars": {}}})
+    manifests = resolve_modules(config, discover_modules(REAL_MODULES))
+    files = build_desired_state(config, manifests).file_by_path()
+    agent = files[".claude/agents/daily-planner.md"].content.decode("utf-8")
+    assert "- task-capture" in agent  # appears under "## Skills to consult"
+
+
 def test_no_unrendered_placeholders_outside_static_skills(full_vault):
     offenders = []
     for path in full_vault.rglob("*"):
