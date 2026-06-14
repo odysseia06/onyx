@@ -43,6 +43,7 @@ This is the morning scaffold. Run it with Obsidian open; it is additive and idem
 ## Skills to consult
 
 - daily-notes
+- task-capture
 - vault-operations
 - obsidian-cli
 - obsidian-markdown

@@ -22,4 +22,4 @@ Invoke an agent by name; each carries its own read/write scope and a step-by-ste
 
 ## Skills
 
-Installed in `.claude/skills/`: `vault-bootstrap`, `vault-conventions`, `obsidian-tasks`, `obsidian-templater`, `vault-operations`, `exam-prep`, `daily-notes`, `fitness-review`, `oss-tracking`, `devlogs`, `reading-triage`, `paper-pipeline` — read the relevant `SKILL.md` when it applies.
+Installed in `.claude/skills/`: `vault-bootstrap`, `vault-conventions`, `obsidian-tasks`, `obsidian-templater`, `vault-operations`, `exam-prep`, `daily-notes`, `task-capture`, `fitness-review`, `oss-tracking`, `devlogs`, `reading-triage`, `paper-pipeline` — read the relevant `SKILL.md` when it applies.

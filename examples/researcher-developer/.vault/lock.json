@@ -3,7 +3,7 @@
   "entries": [
     {
       "path": ".claude/agents/daily-planner.md",
-      "sha256": "7ff0af76b172ee0ef0b8c438f03d91fd2c55040a0b369a51abab9907177a5bf8",
+      "sha256": "7101817d915f048899bc8767ffa2486803f6d99e69fdc0f9465cd3518142c5cf",
       "module": "daily-notes",
       "module_version": "0.1.0",
       "kind": "managed",
@@ -59,7 +59,7 @@
     },
     {
       "path": ".claude/onyx.md",
-      "sha256": "5a3cefc986f68b3be4cfbe9d1276c1f090af91f55c025d558f14f8d2b3418c51",
+      "sha256": "3dea7a161ed085db10978a7e0b6e0254b54c688c88ee2c29f8e3c086605b28db",
       "module": "core",
       "module_version": "0.1.0",
       "kind": "managed",
@@ -133,6 +133,14 @@
       "path": ".claude/skills/reading-triage/SKILL.md",
       "sha256": "107cf4f19ffb9a00e56da02a0efe802e3f1524f1097e8abe53baec289549933a",
       "module": "reading",
+      "module_version": "0.1.0",
+      "kind": "managed",
+      "location": "vault"
+    },
+    {
+      "path": ".claude/skills/task-capture/SKILL.md",
+      "sha256": "e7cc04bcb867aa60132ec25e775890bbba0d2532b9a26c1ac2446e38cdece075",
+      "module": "daily-notes",
       "module_version": "0.1.0",
       "kind": "managed",
       "location": "vault"
@@ -379,7 +387,7 @@
     },
     {
       "path": "Templates/Daily/Daily Note.md",
-      "sha256": "b7087dd599f6cfc9b0eb7d1c0b536c96dc2c3a9474106b31c1f063977cb3a800",
+      "sha256": "3284f1dcc7c932416291abea8ebf0ed6b3391cc6f8581baaed2e28b5c92059d4",
       "module": "daily-notes",
       "module_version": "0.1.0",
       "kind": "managed",
