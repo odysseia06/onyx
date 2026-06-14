@@ -182,3 +182,11 @@ def test_project_steward_playbook_and_triggers():
     assert "task-capture" not in steward.skills
     assert "obsidian-cli" not in steward.skills
     assert "vault-operations" in steward.skills
+
+
+def test_project_steward_has_preamble_once_and_confirm_line():
+    config = make_config({"projects-software": {"version": "0.1.0"}})
+    files = build_desired_state(config, resolve_modules(config, discover_modules(REAL_MODULES))).file_by_path()
+    agent = files[".claude/agents/project-steward.md"].content.decode("utf-8")
+    assert agent.count("## Operating the live vault") == 1
+    assert "confirm in one line" in agent
