@@ -14,6 +14,7 @@ AGENT = {
         "scope": {"read": ["{{root}}/**"], "write": ["{{root}}/Out/**"]},
         "escalate_when": ["anything odd happens in {{root}}"],
         "disclaimer": "Not advice.",
+        "triggers": ["log this thing"],
     }
 }
 
@@ -84,6 +85,7 @@ def test_claude_code_runtime_gets_claude_md_and_digest(home):
     digest = (vault / ".claude" / "onyx.md").read_text(encoding="utf-8")
     assert "`obsidian`" in digest and "vault-operations" in digest  # the operating contract
     assert "- **demo-agent** — Tends the demo domain." in digest  # routing table, description resolved
+    assert "log this thing" in digest  # the first trigger surfaces in the routing digest
     assert not (vault / "AGENTS.md").exists()  # claude-only: no AGENTS.md
 
 

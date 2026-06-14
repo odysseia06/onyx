@@ -59,7 +59,7 @@
     },
     {
       "path": ".claude/onyx.md",
-      "sha256": "3dea7a161ed085db10978a7e0b6e0254b54c688c88ee2c29f8e3c086605b28db",
+      "sha256": "0035d9638214240cdaec1a9528267cc31e9d48ad6887589b56f5a032d506a1ed",
       "module": "core",
       "module_version": "0.1.0",
       "kind": "managed",

@@ -223,7 +223,10 @@ def claude_orientation_intents(
         ctx = RenderContext(resolved_vars[manifest.name], resolved_vars, globals_)
         for agent in manifest.agents:
             origin = f"module {manifest.name!r}: agent {agent.name!r} (CLAUDE.md)"
-            roster.append(f"- **{agent.name}** — {render_text(agent.description, ctx, origin=origin)}")
+            line = f"- **{agent.name}** — {render_text(agent.description, ctx, origin=origin)}"
+            if agent.triggers:
+                line += f' Say e.g. "{render_text(agent.triggers[0], ctx, origin=origin)}".'
+            roster.append(line)
     skill_ids = [skill.id for manifest in manifests for skill in manifest.skills]
 
     digest = [
