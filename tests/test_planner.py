@@ -72,6 +72,7 @@ def test_fresh_vault_plans_creates_only(world):
     assert sorted(a.path for a in by_type[CREATE]) == [
         ".claude/onyx.md",
         "CLAUDE.md",
+        "Onyx Assistant.md",
         "Start-Here.md",
         "Start.md",
         TEMPLATE,
@@ -85,7 +86,7 @@ def test_converged_vault_plans_nothing(world):
     assert p.is_empty and not p.reports
     assert p.noops.get("dir_exists") == 1
     assert p.noops.get("seed_done") == 2  # Start.md and the seeded CLAUDE.md wrapper
-    assert p.noops.get("up_to_date") == 3  # demo template, Start-Here, and the .claude/onyx.md digest
+    assert p.noops.get("up_to_date") == 4  # demo template, Start-Here, Onyx Assistant.md, and the .claude/onyx.md digest
 
 
 def test_untracked_identical_file_is_claimed_not_rewritten(world):

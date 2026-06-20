@@ -322,6 +322,14 @@
       "location": "vault"
     },
     {
+      "path": "Onyx Assistant.md",
+      "sha256": "046a789aeedfa722d492b98b13a5146c7010117dd5cffe85f0f03860735da254",
+      "module": "core",
+      "module_version": "0.1.0",
+      "kind": "managed",
+      "location": "vault"
+    },
+    {
       "path": "Projects/Software/OSS-Contributing.base",
       "sha256": "86dc3f8a7d3e795a7dd0bb232d95b537da44e91ffb2bf174df5ee33e3049b35a",
       "module": "oss",
@@ -371,7 +379,7 @@
     },
     {
       "path": "Start-Here.md",
-      "sha256": "7717e9dee6d9c80f4b462c529bad5acd9784275850a38f24349dc8385eacc70d",
+      "sha256": "756c0a271f912bf1701624ebe961b9cd775ce9a951ec624e0912755265b5a3a7",
       "module": "core",
       "module_version": "0.1.0",
       "kind": "managed",

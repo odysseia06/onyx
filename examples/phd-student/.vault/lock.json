@@ -226,6 +226,14 @@
       "location": "vault"
     },
     {
+      "path": "Onyx Assistant.md",
+      "sha256": "4b674fcd88c3523a56191b0225166b5754717ad37f9540a9c24404683b046541",
+      "module": "core",
+      "module_version": "0.1.0",
+      "kind": "managed",
+      "location": "vault"
+    },
+    {
       "path": "Reading/00 Dashboard.md",
       "sha256": "81d5009a60ffa843954c7b8bbcfb807948f5ab4c10d0ab5f1e8409978984b858",
       "module": "reading",
@@ -243,7 +251,7 @@
     },
     {
       "path": "Start-Here.md",
-      "sha256": "ff934b92b7c548bed51d6e8238fb0d21f63e708fe17c7f71d8254ac43266dd3d",
+      "sha256": "8cd37b2ca29d69184f22e71f2aafc7841294c080b985171e74fd74f5a1620f1a",
       "module": "core",
       "module_version": "0.1.0",
       "kind": "managed",

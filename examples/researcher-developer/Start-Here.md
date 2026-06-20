@@ -35,3 +35,4 @@ Onyx manages this vault. The engine regenerates this note when your module set c
 - `.vault/config.yaml` declares your intent. Edit it freely, then run `onyx plan` to preview the effect and `onyx apply` to reconcile.
 - `onyx add <module>` enables more modules, `onyx modules` lists what exists, and `onyx doctor` checks vault health read-only.
 - Everything here works without any agent: templates are plain copies, views are plain files, and deleting `.claude/` costs convenience, never function.
+- See `Onyx Assistant.md` for what your assistant can do and what to say.
