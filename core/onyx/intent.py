@@ -57,7 +57,7 @@ class DesiredState:
         return {f.path: f for f in self.files}
 
 
-def _start_here_intent(manifests: list[Manifest], core_version: str) -> FileIntent:
+def _start_here_intent(manifests: list[Manifest], core_version: str, *, claude_runtime: bool) -> FileIntent:
     """The §9.2 "Start here" note: a managed, regenerated summary of the enabled module set.
 
     Deliberately a pure function of the module set — no dates, no vault name —
@@ -88,15 +88,18 @@ def _start_here_intent(manifests: list[Manifest], core_version: str) -> FileInte
         lines += ["", "## First actions", ""]
         for name, text in first_actions:
             lines.append(f"- **{name}**: {text}")
-    lines += [
+    working = [
         "",
         "## Working the vault",
         "",
         "- `.vault/config.yaml` declares your intent. Edit it freely, then run `onyx plan` to preview the effect and `onyx apply` to reconcile.",
         "- `onyx add <module>` enables more modules, `onyx modules` lists what exists, and `onyx doctor` checks vault health read-only.",
         "- Everything here works without any agent: templates are plain copies, views are plain files, and deleting `.claude/` costs convenience, never function.",
-        "",
     ]
+    if claude_runtime:
+        working.append("- See `Onyx Assistant.md` for what your assistant can do and what to say.")
+    working.append("")
+    lines += working
     content = encode_text("\n".join(lines))
     return FileIntent(
         path=START_HERE_PATH,
@@ -196,7 +199,7 @@ def build_desired_state(config: Config, manifests: list[Manifest]) -> DesiredSta
 
     extras = claude_code_intents(config, manifests, resolved_vars, globals_)
     core_version = next(m.version for m in manifests if m.name == "core")
-    extras.append(_start_here_intent(manifests, core_version))
+    extras.append(_start_here_intent(manifests, core_version, claude_runtime="claude-code" in config.runtimes))
     extras.extend(
         claude_orientation_intents(config, manifests, resolved_vars, globals_, core_version)
     )

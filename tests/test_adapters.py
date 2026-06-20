@@ -226,3 +226,16 @@ def test_assistant_guide_skill_without_description_falls_back(tmp_path):
     config = make_config({"bare": {"version": "0.1.0"}})
     text = desired_for(modules_root, config).file_by_path()["Onyx Assistant.md"].content.decode("utf-8")
     assert "- **bare-skill** — see its `SKILL.md`." in text
+
+
+def test_start_here_points_to_assistant_for_claude(agent_world):
+    config = make_config({"demo": {"version": "0.1.0"}})
+    text = desired_for(agent_world, config).file_by_path()["Start-Here.md"].content.decode("utf-8")
+    assert "See `Onyx Assistant.md`" in text
+
+
+def test_start_here_has_no_assistant_pointer_without_claude(agent_world):
+    config = make_config({"demo": {"version": "0.1.0"}})
+    config.runtimes = ["generic"]
+    text = desired_for(agent_world, config).file_by_path()["Start-Here.md"].content.decode("utf-8")
+    assert "Onyx Assistant.md" not in text
