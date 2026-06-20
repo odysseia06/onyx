@@ -3,10 +3,12 @@
 import pytest
 
 from conftest import make_config, plan_for, write_module
+from onyx.adapters import _folders_from_scope, _frontmatter_description, _skill_one_liner
 from onyx.applier import apply_plan
 from onyx.errors import ResolveError
 from onyx.intent import build_desired_state
 from onyx.lockio import load_lock
+from onyx.model import ProvidedSkill
 from onyx.repo import discover_modules
 from onyx.resolve import resolve_modules
 
@@ -97,12 +99,6 @@ def test_start_here_reflects_post_install(world_root):
     text = desired_for(world_root, config).file_by_path()["Start-Here.md"].content.decode("utf-8")
     assert "## First actions" in text
     assert "- **noisy**: Fill in your Strategy note first." in text
-
-
-from pathlib import Path
-
-from onyx.adapters import _folders_from_scope, _frontmatter_description, _skill_one_liner
-from onyx.model import ProvidedSkill
 
 
 def test_frontmatter_description_extracts_field():
@@ -239,3 +235,52 @@ def test_start_here_has_no_assistant_pointer_without_claude(agent_world):
     config.runtimes = ["generic"]
     text = desired_for(agent_world, config).file_by_path()["Start-Here.md"].content.decode("utf-8")
     assert "Onyx Assistant.md" not in text
+
+
+def test_assistant_guide_lists_multiple_write_folders(tmp_path):
+    modules_root = tmp_path / "modules"
+    write_module(modules_root, "core")
+    write_module(
+        modules_root,
+        "multi",
+        variables=[{"key": "root", "prompt": "Root", "default": "Multi-Stuff"}],
+        folders=["{{root}}"],
+        agents={
+            "multi-agent": {
+                "name": "multi-agent",
+                "module": "multi",
+                "description": "Writes two places.",
+                "mission": "Do.",
+                "scope": {"read": ["{{root}}/**"], "write": ["{{root}}/A/**", "{{root}}/B/**"]},
+                "triggers": ["go"],
+            },
+        },
+    )
+    config = make_config({"multi": {"version": "0.1.0"}})
+    text = desired_for(modules_root, config).file_by_path()["Onyx Assistant.md"].content.decode("utf-8")
+    assert "Where its work lands: `Multi-Stuff/A`, `Multi-Stuff/B`" in text
+
+
+def test_assistant_guide_agent_without_triggers_omits_say_line(tmp_path):
+    modules_root = tmp_path / "modules"
+    write_module(modules_root, "core")
+    write_module(
+        modules_root,
+        "silent",
+        variables=[{"key": "root", "prompt": "Root", "default": "Silent-Stuff"}],
+        folders=["{{root}}"],
+        agents={
+            "silent-agent": {
+                "name": "silent-agent",
+                "module": "silent",
+                "description": "No triggers here.",
+                "mission": "Do.",
+                "scope": {"read": ["{{root}}/**"], "write": ["{{root}}/**"]},
+            },
+        },
+    )
+    config = make_config({"silent": {"version": "0.1.0"}})
+    text = desired_for(modules_root, config).file_by_path()["Onyx Assistant.md"].content.decode("utf-8")
+    assert "### silent-agent" in text
+    assert "No triggers here." in text
+    assert "Say e.g.:" not in text  # the only agent has no triggers
