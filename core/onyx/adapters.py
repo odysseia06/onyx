@@ -34,6 +34,7 @@ CLAUDE_SKILLS_PREFIX = ".claude/skills"
 CLAUDE_AGENTS_PREFIX = ".claude/agents"
 CLAUDE_MD_PATH = "CLAUDE.md"
 ONYX_ORIENTATION_PATH = ".claude/onyx.md"
+ONYX_ASSISTANT_PATH = "Onyx Assistant.md"
 
 # The least-privilege floor every rendered agent carries, beyond its own list (§7.1).
 _STANDING_ESCALATIONS = (
@@ -335,6 +336,92 @@ def claude_orientation_intents(
             module_version=core_version,
         ),
     ]
+
+
+def assistant_guide_intent(
+    config: Config,
+    manifests: list[Manifest],
+    resolved_vars: dict[str, dict[str, object]],
+    globals_: dict[str, object],
+    core_version: str,
+) -> FileIntent | None:
+    """A human-facing `Onyx Assistant.md` (§7.4): what each agent does, what to say,
+    and where its work lands, plus a skills appendix.
+
+    Reuses `ResolvedAgent` so the prose matches the generated agent files and
+    `onyx.md`. Managed, core-attributed, claude-code-gated; no dates so golden
+    trees stay byte-exact. Rendered even for a core-only vault (no agents).
+    """
+    if "claude-code" not in config.runtimes:
+        return None
+    enabled_modules = {m.name for m in manifests}
+
+    lines = [
+        "---",
+        "type: assistant-guide",
+        "status: active",
+        "tags: []",
+        "---",
+        "",
+        "# What your assistant can do",
+        "",
+        "This vault works as plain files — none of this is required. With Claude Code open, the agents below operate the vault for you: say what you want and the right one does the work, additively and within its lane. Onyx regenerates this note as you enable or remove modules.",
+        "",
+        "## Agents",
+        "",
+    ]
+
+    blocks: list[list[str]] = []
+    for manifest in manifests:
+        ctx = RenderContext(resolved_vars[manifest.name], resolved_vars, globals_)
+        for agent in manifest.agents:
+            origin = f"module {manifest.name!r}: agent {agent.name!r} (Onyx Assistant.md)"
+            resolved = ResolvedAgent(agent, ctx, enabled_modules, origin=origin)
+            block = [f"### {resolved.name}", resolved.description]
+            if resolved.triggers:
+                says = " · ".join(f'"{t}"' for t in resolved.triggers)
+                block.append(f"Say e.g.: {says}")
+            folders = _folders_from_scope(resolved.write)
+            if folders:
+                block.append("Where its work lands: " + ", ".join(f"`{f}`" for f in folders))
+            else:
+                block.append("Reads only; never writes on its own.")
+            blocks.append(block)
+
+    if blocks:
+        for block in blocks:
+            lines += block
+            lines.append("")
+    else:
+        lines += ["Domain agents arrive as you enable modules (try `onyx add <module>`).", ""]
+
+    skills = [skill for manifest in manifests for skill in manifest.skills]
+    if skills:
+        lines += [
+            "## Skills under the hood",
+            "",
+            "Instruction packages in `.claude/skills/` the agents lean on. You never invoke these by name — they are listed so you know what is there.",
+            "",
+        ]
+        lines += [f"- {_skill_one_liner(skill)}" for skill in skills]
+        lines.append("")
+
+    lines += [
+        "## If you'd rather not use AI",
+        "",
+        "Delete `.claude/` and everything here still works — templates are plain copies, views are plain files. See `Start-Here.md` for the no-AI tour.",
+        "",
+    ]
+
+    content = encode_text("\n".join(lines))
+    return FileIntent(
+        path=ONYX_ASSISTANT_PATH,
+        content=content,
+        sha256=sha256_bytes(content),
+        kind=KIND_MANAGED,
+        module="core",
+        module_version=core_version,
+    )
 
 
 def claude_code_intents(

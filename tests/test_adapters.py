@@ -136,3 +136,93 @@ def test_skill_one_liner_fallback_without_description(tmp_path):
     d.mkdir()
     (d / "SKILL.md").write_text("---\nname: bare\n---\nbody\n", encoding="utf-8")
     assert _skill_one_liner(ProvidedSkill(id="bare", directory=d)) == "**bare** — see its `SKILL.md`."
+
+
+@pytest.fixture
+def agent_world(tmp_path):
+    modules_root = tmp_path / "modules"
+    write_module(modules_root, "core")
+    write_module(
+        modules_root,
+        "demo",
+        variables=[{"key": "root", "prompt": "Root", "default": "Demo-Stuff"}],
+        folders=["{{root}}"],
+        skills={"demo-skill": {"SKILL.md": SKILL_MD}},
+        agents={
+            "demo-agent": {
+                "name": "demo-agent",
+                "module": "demo",
+                "description": "Does demo things in {{root}}.",
+                "mission": "Do demo things.",
+                "scope": {"read": ["{{root}}/**"], "write": ["{{root}}/**"]},
+                "triggers": ["do the demo", "demo this"],
+            },
+            "demo-watcher": {
+                "name": "demo-watcher",
+                "module": "demo",
+                "description": "Watches {{root}}.",
+                "mission": "Watch.",
+                "scope": {"read": ["{{root}}/**"]},
+                "triggers": ["watch it"],
+            },
+        },
+    )
+    return modules_root
+
+
+def test_assistant_guide_present_and_lists_agents(agent_world):
+    config = make_config({"demo": {"version": "0.1.0"}})
+    note = desired_for(agent_world, config).file_by_path()["Onyx Assistant.md"]
+    assert note.module == "core" and note.kind == "managed"
+    text = note.content.decode("utf-8")
+    assert "type: assistant-guide" in text
+    assert "### demo-agent" in text
+    assert "Does demo things in Demo-Stuff." in text
+    assert 'Say e.g.: "do the demo" · "demo this"' in text
+    assert "Where its work lands: `Demo-Stuff`" in text
+
+
+def test_assistant_guide_read_only_agent_line(agent_world):
+    config = make_config({"demo": {"version": "0.1.0"}})
+    text = desired_for(agent_world, config).file_by_path()["Onyx Assistant.md"].content.decode("utf-8")
+    assert "### demo-watcher" in text
+    assert "Reads only; never writes on its own." in text
+
+
+def test_assistant_guide_skills_appendix_uses_skill_md(agent_world):
+    config = make_config({"demo": {"version": "0.1.0"}})
+    text = desired_for(agent_world, config).file_by_path()["Onyx Assistant.md"].content.decode("utf-8")
+    assert "## Skills under the hood" in text
+    assert "- **demo-skill** — test skill" in text  # from SKILL_MD frontmatter
+
+
+def test_assistant_guide_absent_for_non_claude_runtime(agent_world):
+    config = make_config({"demo": {"version": "0.1.0"}})
+    config.runtimes = ["generic"]
+    assert "Onyx Assistant.md" not in desired_for(agent_world, config).file_by_path()
+
+
+def test_assistant_guide_renders_for_core_only_vault(synth_root):
+    config = make_config()  # core only: no agents, no skills
+    text = desired_for(synth_root, config).file_by_path()["Onyx Assistant.md"].content.decode("utf-8")
+    assert "Domain agents arrive as you enable modules" in text
+
+
+def test_assistant_guide_has_no_dates(agent_world):
+    text = desired_for(agent_world, config=make_config({"demo": {"version": "0.1.0"}})).file_by_path()[
+        "Onyx Assistant.md"
+    ].content.decode("utf-8")
+    assert "created:" not in text and "2026-01-01" not in text
+
+
+def test_assistant_guide_skill_without_description_falls_back(tmp_path):
+    modules_root = tmp_path / "modules"
+    write_module(modules_root, "core")
+    write_module(
+        modules_root,
+        "bare",
+        skills={"bare-skill": {"SKILL.md": "---\nname: bare-skill\n---\n\nbody\n"}},
+    )
+    config = make_config({"bare": {"version": "0.1.0"}})
+    text = desired_for(modules_root, config).file_by_path()["Onyx Assistant.md"].content.decode("utf-8")
+    assert "- **bare-skill** — see its `SKILL.md`." in text

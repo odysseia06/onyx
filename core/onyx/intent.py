@@ -189,6 +189,7 @@ def build_desired_state(config: Config, manifests: list[Manifest]) -> DesiredSta
     # Runtime artifacts and generated content ride the same pipeline (§7.4).
     from .adapters import (  # local import: adapters builds FileIntents from here
         agents_md_intent,
+        assistant_guide_intent,
         claude_code_intents,
         claude_orientation_intents,
     )
@@ -199,6 +200,9 @@ def build_desired_state(config: Config, manifests: list[Manifest]) -> DesiredSta
     extras.extend(
         claude_orientation_intents(config, manifests, resolved_vars, globals_, core_version)
     )
+    assistant = assistant_guide_intent(config, manifests, resolved_vars, globals_, core_version)
+    if assistant is not None:
+        extras.append(assistant)
     agents_md = agents_md_intent(config, manifests, resolved_vars, globals_, core_version)
     if agents_md is not None:
         extras.append(agents_md)
