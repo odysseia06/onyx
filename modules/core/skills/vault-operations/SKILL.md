@@ -26,6 +26,7 @@ This is the engine's §8 write contract, restated for commands that mutate a run
 - **The engine owns structure; you own content.** Folders, modules, templates, and Bases come from `onyx apply`, not from an agent. Fill notes inside the structure that is already there; never invent folders or move the furniture.
 - **Respect managed files.** Files Onyx tracks in `.vault/lock.json` update themselves — do not hand-edit them through the CLI. Never touch `.vault/` at all.
 - **Look before you write, and stay idempotent.** Read the target first (`read`, `daily:read`, `file`). If what you would add is already there, stop — running a workflow twice must not double-write it.
+- **Report only state you checked.** When you report that a file already existed, or that you did or did not overwrite it, that claim must come from a read you performed this run — never relayed from a sub-step's narration.
 
 ## Two edits beyond plain additions
 
