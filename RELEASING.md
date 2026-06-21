@@ -40,8 +40,11 @@ from the `publish.yml` workflow running in the `pypi` environment.
 
 1. Make sure `main` is green (the `ci` workflow) and the working tree is clean.
 2. Bump the version in `pyproject.toml` and `core/onyx/__init__.py`
-   `ENGINE_VERSION` (so `onyx --version` matches). PyPI versions are immutable,
-   so always go forward — e.g. `1.0.1 → 1.0.2`.
+   `ENGINE_VERSION` (so `onyx --version` matches), and update the pinned
+   assertion in `tests/test_cli.py::test_version_via_real_entrypoint` (it
+   asserts the exact `onyx <version>` string). PyPI versions are immutable, so
+   always go forward — e.g. `1.0.1 → 1.0.2`. (The plugin + marketplace manifests
+   are stamped by `build_plugin.py` in step 3 — don't hand-edit them.)
 3. Regenerate the derived artifacts and run the suite:
    ```
    python tools/regen_golden.py && python tools/gen_examples.py && python tools/build_plugin.py
