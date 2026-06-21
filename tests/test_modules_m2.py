@@ -1,6 +1,7 @@
 """The real M2 modules, end to end: install, render, style, idempotence (KICKSTART.md §14 M2)."""
 
 import json
+import re
 
 import pytest
 import yaml
@@ -90,6 +91,18 @@ def test_daily_template_has_captured_query():
     template = files["Templates/Daily/Daily Note.md"].content.decode("utf-8")
     assert "### Captured" in template
     assert "tags include #captured" in template
+
+
+def test_daily_template_sections_match_skill_enumeration():
+    """The daily-notes skill's prose section list must name every task-query section
+    the template emits. Reads raw assets, so it is immune to module-version pins."""
+    base = REAL_MODULES / "daily-notes"
+    template = (base / "assets" / "Templates" / "Daily" / "Daily Note.md").read_text(encoding="utf-8")
+    skill_md = (base / "skills" / "daily-notes" / "SKILL.md").read_text(encoding="utf-8")
+    sections = set(re.findall(r'### ([^"\\\n]+)', template))
+    assert sections, "no ### task-query sections found in the daily template — regex or template changed"
+    missing = sorted(s for s in sections if s not in skill_md)
+    assert not missing, f"daily template task sections not named in the daily-notes skill: {missing}"
 
 
 def test_daily_planner_agent_lists_task_capture():

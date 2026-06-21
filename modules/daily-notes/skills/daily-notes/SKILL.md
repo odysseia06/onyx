@@ -16,7 +16,7 @@ The vault's daily-notes module follows one convention with one configurable choi
 ## Creating the note
 
 - Instantiate `Daily Note.md` from the vault's Templates folder (under `Daily/`). With Templater installed the date placeholders and the task-query macro fill themselves; without it, replace each `<% ... %>` with today's date by hand and the `tasks` blocks render once the Tasks plugin is installed.
-- The baked-in queries give the day its structure: Due Today, Scheduled Today, Overdue, Carry-over (everything unfinished in the daily-notes tree), Completed Today.
+- The baked-in queries give the day its structure: Due Today, Scheduled Today, Overdue, Carry-over (everything unfinished in the daily-notes tree), Captured, Completed Today.
 
 ## Working the day
 
