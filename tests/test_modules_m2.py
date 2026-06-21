@@ -105,6 +105,23 @@ def test_daily_template_sections_match_skill_enumeration():
     assert not missing, f"daily template task sections not named in the daily-notes skill: {missing}"
 
 
+def test_no_template_checkbox_carries_a_raw_macro():
+    """A literal task checkbox containing a raw Templater macro is scanned by the
+    Tasks plugin as a phantom open task. Templates must let Templater emit such
+    checkboxes, never ship them literally. Reads raw assets, so it is immune to
+    module-version pins."""
+    pattern = re.compile(r"^\s*[-*+] \[[ xX]\].*<%")
+    offenders = []
+    for md in sorted(REAL_MODULES.glob("*/assets/**/*.md")):
+        for i, line in enumerate(md.read_text(encoding="utf-8").splitlines(), 1):
+            if pattern.match(line):
+                offenders.append(f"{md.relative_to(REAL_MODULES).as_posix()}:{i}")
+    assert not offenders, (
+        f"template checkboxes carrying raw Templater macros "
+        f"(Tasks scans these as phantom tasks): {offenders}"
+    )
+
+
 def test_daily_planner_agent_lists_task_capture():
     config = make_config({"core": {"version": "0.1.1"}, "daily-notes": {"version": "0.2.1", "vars": {}}})
     manifests = resolve_modules(config, discover_modules(REAL_MODULES))

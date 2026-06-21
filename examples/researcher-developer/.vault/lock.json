@@ -555,7 +555,7 @@
     },
     {
       "path": "Templates/Projects/Task Note.md",
-      "sha256": "b290a42b607170d865c9fae92e62babcd633e7ac0191dd15b5429896a5ab85b6",
+      "sha256": "85bd5f26fc42f147466048309690bc1436cfeff1d05979626fa9877619ad83ae",
       "module": "projects-software",
       "module_version": "0.2.2",
       "kind": "managed",
